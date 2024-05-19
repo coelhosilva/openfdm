@@ -2,9 +2,9 @@ import setuptools
 import os
 import io
 
-NAME = "openfoqa"
+NAME = "openfdm"
 VERSION = "0.0.1.dev0"
-DESCRIPTION = "openFOQA is a Python package for Flight Operations Quality Assurance (FOQA) event detection."
+DESCRIPTION = "openFDM is a Python package for Flight Data Monitoring (FDM)/Flight Operations Quality Assurance (FOQA)."
 EMAIL = "coelho@ita.br"
 AUTHOR = "Lucas Coelho e Silva"
 REQUIRES_PYTHON = ">=3.10.4"
