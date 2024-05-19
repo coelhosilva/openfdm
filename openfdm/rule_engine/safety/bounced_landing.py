@@ -2,14 +2,14 @@ __all__ = [
     "BouncedLandingEvent",
 ]
 
-from openfoqa.dataframes import (
+from openfdm.dataframes import (
     StandardizedFlightDataframe,
     StandardizedDataframeParameters,
 )
-from .base import FOQAEvent, FOQAEventOutput
+from ..base import FlightDataMonitoringEvent, FlightDataMonitoringEventOutput
 
 
-class BouncedLandingEvent(FOQAEvent):
+class BouncedLandingEvent(FlightDataMonitoringEvent):
     event_name = "bounced_landing"
     version = "0.0.1-rc0"
     required_parameters = [
@@ -22,8 +22,8 @@ class BouncedLandingEvent(FOQAEvent):
     def _evaluate_event(
         self,
         flight_dataframe: StandardizedFlightDataframe,
-    ) -> FOQAEventOutput:
-        df_flight = flight_dataframe.copy()
+    ) -> FlightDataMonitoringEventOutput:
+        df_flight = flight_dataframe.data.copy()
 
         # Getting the touchdown
         touchdown_index = (

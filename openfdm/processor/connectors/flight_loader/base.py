@@ -3,7 +3,7 @@ __all__ = [
 ]
 
 from abc import ABC, abstractmethod
-from openfoqa.dataframes import StandardizedFlightDataframe
+from openfdm.dataframes import StandardizedFlightDataframe
 
 
 class FlightLoader(ABC):

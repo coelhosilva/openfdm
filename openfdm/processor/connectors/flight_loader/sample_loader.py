@@ -3,7 +3,7 @@ __all__ = [
 ]
 
 import pandas as pd
-from openfoqa.dataframes import (
+from openfdm.dataframes import (
     StandardizedFlightDataframe,
     StandardizedDataframeParameters,
 )
