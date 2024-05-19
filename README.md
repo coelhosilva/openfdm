@@ -13,8 +13,9 @@ It provides:
 
 The easiest way to install `openfoqa` is using pip from your virtual environment.
 
-Directly from GitHub: TBD.
-<!-- `pip install git+https://github.com/coelhosilva/flight-ad.git` -->
+Directly from GitHub:
+
+`pip install git+https://github.com/coelhosilva/openfoqa.git`
 
 ## Examples
 
