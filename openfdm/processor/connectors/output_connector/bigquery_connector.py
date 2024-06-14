@@ -88,14 +88,15 @@ class BigQueryOutputConnector(OutputConnector):
                 f"Missing table id for the following events: {missing_events}"
             )
 
+        # Writing on each event table once
         for processed_event_name in processed_events_names:
-
             table_id = self.bigquery_table_id_per_event[processed_event_name]
 
             table_events_df = pd.DataFrame(
                 list(
                     filter(
-                        lambda x: x["event_name"] == processed_event_name, event_output
+                        lambda x: x["event_name"] == processed_event_name,
+                        event_output,
                     )
                 )
             )
