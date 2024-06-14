@@ -37,7 +37,8 @@ class FlightDataMonitoringPipeline:
 
     def run(self) -> None:
         logger.log(
-            level=logging.INFO, msg="Starting the Flight Data Monitoring pipeline."
+            level=logging.INFO,
+            msg="[openfdm-pipeline] Starting the Flight Data Monitoring pipeline.",
         )
         processed_events = []
 
@@ -58,9 +59,13 @@ class FlightDataMonitoringPipeline:
 
         # add aftermath here of removals and so forth. try exceptions.
         # for event in processed_events:
+        logger.log(
+            level=logging.INFO,
+            msg="[openfdm-pipeline] Post processing events...",
+        )
         self.flight_loader.post_process_events(processed_events)
 
         logger.log(
             level=logging.INFO,
-            msg="Flight Data Monitoring pipeline finished.",
+            msg="[openfdm-pipeline] Flight Data Monitoring pipeline finished.",
         )

@@ -109,6 +109,10 @@ class GoogleCloudStorageFlightLoader(FlightLoader):
                     self.source_bucket.delete_blob(blob_id)
             else:
                 for blob_id in unique_blob_ids:
+                    logger.log(
+                        level=logging.INFO,
+                        msg=f"Copying blob '{blob_id}' to bucket '{self.post_processing_destination}'.",
+                    )
                     blob = self.source_bucket.blob(blob_id)
                     blob_copy = self.source_bucket.copy_blob(
                         blob,
