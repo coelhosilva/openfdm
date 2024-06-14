@@ -3,12 +3,12 @@ __all__ = [
 ]
 
 import pandas as pd
+from pathlib import Path
 from openfdm.dataframes import (
     StandardizedFlightDataframe,
     StandardizedDataframeParameters,
 )
-from pathlib import Path
-from .base import FlightLoader
+from .base import FlightLoader, FlightDataMonitoringEventOutput
 
 
 _BASE_PATH = Path(__file__).parent / "sample_data"
@@ -44,3 +44,9 @@ class SampleFlightLoader(FlightLoader):
                 ),
             ),
         ]
+
+    def post_process_events(
+        self,
+        events: list[FlightDataMonitoringEventOutput],
+    ) -> None:
+        pass

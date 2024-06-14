@@ -1,2 +1,9 @@
 numpy
 pandas
+pyarrow
+tqdm
+google-cloud-storage
+google-cloud-bigquery
+fsspec
+gcsfs
+db-dtypes

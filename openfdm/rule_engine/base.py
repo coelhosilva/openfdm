@@ -15,6 +15,7 @@ from datetime import datetime, timezone
 
 class FlightDataMonitoringEventOutput(TypedDict):
     flight_id: str
+    file_id_from_source: str
     event_name: str
     rule_version: str
     event_output: dict
@@ -30,6 +31,7 @@ class FlightDataMonitoringEvent(ABC):
             "event_name": self.event_name,
             "rule_version": self.version,
             "flight_id": flight_dataframe.flight_id,
+            "file_id_from_source": flight_dataframe.file_id_from_source,
             "event_output": self._evaluate_event(
                 self.filter_dataframe(flight_dataframe)
             ),
