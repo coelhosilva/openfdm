@@ -4,7 +4,8 @@ __all__ = [
 
 import logging
 import pandas as pd
-from typing import Literal, get_args
+import more_itertools as mit
+from typing import Literal, get_args, Generator
 from pathlib import Path
 from google.cloud.storage import Client
 from google.api_core.exceptions import Forbidden
@@ -73,28 +74,48 @@ class GoogleCloudStorageFlightLoader(FlightLoader):
                 bucket_name=post_processing_destination,
             )
 
-    def load_flights(self) -> list[StandardizedFlightDataframe]:
-        blob_names = [blob.name for blob in self.source_bucket.list_blobs()]
+    @property
+    def blob_names(self):
+        return [blob.name for blob in self.source_bucket.list_blobs()]
 
-        return [
-            StandardizedFlightDataframe(
-                flight_id=Path(blob_name).stem,
-                file_id_from_source=blob_name,
-                data=pd.read_parquet(
-                    f"gs://{self.source_bucket_name}/{blob_name}"
-                ).rename(
-                    columns={
-                        "ALT": StandardizedDataframeParameters.PressureAltitude,
-                        "WOW": StandardizedDataframeParameters.AirGround,
-                        "PTCH": StandardizedDataframeParameters.Pitch,
-                        "VRTG": StandardizedDataframeParameters.VerticalAcceleration,
-                        "ROLL": StandardizedDataframeParameters.Roll,
-                        "time": StandardizedDataframeParameters.Time,
-                    }
-                ),
+    def _load_flight(self, blob_name) -> StandardizedFlightDataframe:
+        return StandardizedFlightDataframe(
+            flight_id=Path(blob_name).stem,
+            file_id_from_source=blob_name,
+            data=pd.read_parquet(f"gs://{self.source_bucket_name}/{blob_name}").rename(
+                columns={
+                    "ALT": StandardizedDataframeParameters.PressureAltitude,
+                    "WOW": StandardizedDataframeParameters.AirGround,
+                    "PTCH": StandardizedDataframeParameters.Pitch,
+                    "VRTG": StandardizedDataframeParameters.VerticalAcceleration,
+                    "ROLL": StandardizedDataframeParameters.Roll,
+                    "time": StandardizedDataframeParameters.Time,
+                }
+            ),
+        )
+
+    def _load_flights(
+        self,
+        blob_names: int = None,
+    ) -> list[StandardizedFlightDataframe]:
+        return [self._load_flight(blob_name) for blob_name in blob_names]
+
+    def load_flights(self) -> list[StandardizedFlightDataframe]:
+        return [self._load_flight(blob_name) for blob_name in self.blob_names]
+
+    def load_flight_batch(
+        self,
+        batch_size: int = None,
+    ) -> Generator:
+        if batch_size is None:
+            yield self.load_flights()
+        else:
+            blob_batches = mit.chunked(
+                self.blob_names,
+                batch_size,
             )
-            for blob_name in blob_names
-        ]
+            for blob_batch in blob_batches:
+                yield self._load_flights(blob_names=blob_batch)
 
     def post_process_events(
         self,

@@ -12,6 +12,12 @@ class FlightLoader(ABC):
     def load_flights(self) -> list[StandardizedFlightDataframe]: ...
 
     @abstractmethod
+    def load_flight_batch(
+        self,
+        batch_size: int = None,
+    ) -> list: ...
+
+    @abstractmethod
     def post_process_events(
         self,
         events: list[FlightDataMonitoringEventOutput],
