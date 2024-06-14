@@ -2,14 +2,14 @@ __all__ = [
     "HardLandingEvent",
 ]
 
-from openfoqa.dataframes import (
+from openfdm.dataframes import (
     StandardizedFlightDataframe,
     StandardizedDataframeParameters,
 )
-from .base import FOQAEvent, FOQAEventOutput
+from ..base import FlightDataMonitoringEvent, FlightDataMonitoringEventOutput
 
 
-class HardLandingEvent(FOQAEvent):
+class HardLandingEvent(FlightDataMonitoringEvent):
     event_name = "hard_landing"
     version = "0.0.1-rc0"
     required_parameters = [
@@ -24,8 +24,8 @@ class HardLandingEvent(FOQAEvent):
     def _evaluate_event(
         self,
         flight_dataframe: StandardizedFlightDataframe,
-    ) -> FOQAEventOutput:
-        df_flight = flight_dataframe.copy()
+    ) -> FlightDataMonitoringEventOutput:
+        df_flight = flight_dataframe.data.copy()
 
         rr_calc = df_flight[
             [

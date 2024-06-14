@@ -1,12 +1,12 @@
 __all__ = [
-    "FOQAEvent",
-    "FOQAEventOutput",
+    "FlightDataMonitoringEvent",
+    "FlightDataMonitoringEventOutput",
     "HardLandingEvent",
     "BouncedLandingEvent",
     "LandingInACrabEvent",
 ]
 
-from .base import FOQAEvent, FOQAEventOutput
+from ..base import FlightDataMonitoringEvent, FlightDataMonitoringEventOutput
 from .hard_landing import HardLandingEvent
 from .bounced_landing import BouncedLandingEvent
 from .landing_crab import LandingInACrabEvent

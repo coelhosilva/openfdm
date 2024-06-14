@@ -1,33 +1,42 @@
 __all__ = [
-    "FOQAEventOutput",
-    "FOQAEvent",
+    "FlightDataMonitoringEventOutput",
+    "FlightDataMonitoringEvent",
 ]
 
 
 from abc import ABC, abstractmethod
 from typing import TypedDict
-from openfoqa.dataframes import (
+from openfdm.dataframes import (
     StandardizedFlightDataframe,
     StandardizedDataframeParameters,
 )
+from datetime import datetime, timezone
 
 
-class FOQAEventOutput(TypedDict):
+class FlightDataMonitoringEventOutput(TypedDict):
+    flight_id: str
+    file_id_from_source: str
     event_name: str
     rule_version: str
     event_output: dict
+    processing_utc_timestamp_ms: int
 
 
-class FOQAEvent(ABC):
+class FlightDataMonitoringEvent(ABC):
     def __call__(
         self,
         flight_dataframe: StandardizedFlightDataframe,
-    ) -> FOQAEventOutput:
+    ) -> FlightDataMonitoringEventOutput:
         return {
             "event_name": self.event_name,
             "rule_version": self.version,
+            "flight_id": flight_dataframe.flight_id,
+            "file_id_from_source": flight_dataframe.file_id_from_source,
             "event_output": self._evaluate_event(
                 self.filter_dataframe(flight_dataframe)
+            ),
+            "processing_utc_timestamp_ms": int(
+                datetime.now(timezone.utc).timestamp() * 1000
             ),
         }
 
@@ -38,7 +47,7 @@ class FOQAEvent(ABC):
         self,
         flight_dataframe: StandardizedFlightDataframe,
     ) -> StandardizedFlightDataframe:
-        return flight_dataframe.data[self.required_parameters]
+        return flight_dataframe[self.required_parameters]
 
     @property
     @abstractmethod
@@ -56,6 +65,6 @@ class FOQAEvent(ABC):
     def _evaluate_event(
         self,
         flight_dataframe: StandardizedFlightDataframe,
-    ) -> FOQAEventOutput: ...
+    ) -> FlightDataMonitoringEventOutput: ...
 
     # register_calculation_rule??(function and dataframe category) Support to different airplanes.

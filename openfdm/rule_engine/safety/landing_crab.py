@@ -2,14 +2,14 @@ __all__ = [
     "LandingInACrabEvent",
 ]
 
-from openfoqa.dataframes import (
+from openfdm.dataframes import (
     StandardizedFlightDataframe,
     StandardizedDataframeParameters,
 )
-from .base import FOQAEvent, FOQAEventOutput
+from ..base import FlightDataMonitoringEvent, FlightDataMonitoringEventOutput
 
 
-class LandingInACrabEvent(FOQAEvent):
+class LandingInACrabEvent(FlightDataMonitoringEvent):
     event_name = "landing_in_a_crab"
     version = "0.0.1-rc0"
     required_parameters = [
@@ -23,8 +23,8 @@ class LandingInACrabEvent(FOQAEvent):
     def _evaluate_event(
         self,
         flight_dataframe: StandardizedFlightDataframe,
-    ) -> FOQAEventOutput:
-        df_flight = flight_dataframe.copy()
+    ) -> FlightDataMonitoringEventOutput:
+        df_flight = flight_dataframe.data.copy()
         df_flight["CORRECTED_HEADING"] = (
             df_flight[StandardizedDataframeParameters.Heading] + 360
         ) % 360

@@ -4,11 +4,13 @@ __all__ = [
 
 import json
 from .base import OutputConnector
-from openfoqa.rule_engine import FOQAEventOutput
+from openfdm.rule_engine import FlightDataMonitoringEventOutput
 
 
 class ConsoleOutputConnector(OutputConnector):
-    def process_foqa_event_output(self, event_output: FOQAEventOutput) -> None:
+    def process_fdm_event_output(
+        self, event_output: FlightDataMonitoringEventOutput
+    ) -> None:
         print(
             json.dumps(
                 event_output,
