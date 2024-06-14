@@ -19,6 +19,7 @@ class SampleFlightLoader(FlightLoader):
         return [
             StandardizedFlightDataframe(
                 flight_id="652200111180513",
+                file_id_from_source="652200111180513.parquet",
                 data=pd.read_parquet(_BASE_PATH / "652200111180513.parquet").rename(
                     columns={
                         "ALT": StandardizedDataframeParameters.PressureAltitude,
@@ -32,6 +33,7 @@ class SampleFlightLoader(FlightLoader):
             ),
             StandardizedFlightDataframe(
                 flight_id="652200111131616",
+                file_id_from_source="652200111131616.parquet",
                 data=pd.read_parquet(_BASE_PATH / "652200111131616.parquet").rename(
                     columns={
                         "ALT": StandardizedDataframeParameters.PressureAltitude,
